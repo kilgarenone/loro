@@ -1,15 +1,16 @@
 const graphql = require("graphql");
+const { GraphQLDateTime } = require("graphql-iso-date");
 
-const { GraphQLObjectType, GraphQLString } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLID } = graphql;
 
 const TweetType = new GraphQLObjectType({
   name: "Tweet",
   type: "Query",
   fields: {
-    id: { type: GraphQLString },
+    id: { type: GraphQLID },
     author: { type: GraphQLString },
     tweet: { type: GraphQLString },
-    created_at: { type: GraphQLString }
+    created_at: { type: GraphQLDateTime }
   }
 });
 

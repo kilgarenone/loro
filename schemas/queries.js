@@ -11,7 +11,7 @@ const RootQuery = new GraphQLObjectType({
       type: TweetType,
       args: { id: { type: GraphQLID } },
       resolve(parentValue, args) {
-        const query = `SELECT * FROM tweet WHERE id=$1`;
+        const query = `SELECT * FROM public.tweet WHERE id=$1`;
         const values = [args.id];
 
         return db
