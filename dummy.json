@@ -1,12 +1,11 @@
 {
   "authors": [
     { "id": 1, "firstName": "ahwei", "desc": "im 222feeling good" },
-    { "id": 2, "firstName": "john", "desc": "pretty feeling good" },
-    { "id": 3, "firstName": "john2", "desc": "222pretty feeling good" }
+    { "id": 2, "firstName": "john", "desc": "pretty feeling good" }
   ],
   "tweets": [
     { "id": 1, "content": "wow im awesome", "authorId": 2 },
-    { "id": 2, "content": "today is a good day", "authorId": 1 },
-    { "id": 3, "content": "today is a good day", "authorId": 3 }
+    { "id": 2, "content": "1 today is a good day", "authorId": 1 },
+    { "id": 3, "content": "2 today is a good day", "authorId": 2 }
   ]
 }

@@ -1,22 +1,37 @@
 const graphql = require("graphql");
 const db = require("../db");
 const axios = require("axios");
-const { GraphQLDateTime } = require("graphql-iso-date");
+// const { GraphQLDateTime } = require("graphql-iso-date");
 
-const { GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLID } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLList,
+  GraphQLSchema,
+  GraphQLString,
+  GraphQLID
+} = graphql;
 
 const AuthorType = new GraphQLObjectType({
   name: "Author",
-  fields: {
+  fields: () => ({
+    // arrow function here resolves circular dependencies around JS closure. Execute the object once whole file did
     id: { type: GraphQLID },
     firstName: { type: GraphQLString },
-    desc: { type: GraphQLString }
-  }
+    desc: { type: GraphQLString },
+    tweets: {
+      type: new GraphQLList(TweetType), // GraphQLList is telling graphql an 'author' can have multiple 'tweet's
+      resolve(parentValue, args) {
+        return axios
+          .get(`http://localhost:3001/authors/${parentValue.id}/tweets`)
+          .then(resp => resp.data);
+      }
+    }
+  })
 });
 
 const TweetType = new GraphQLObjectType({
   name: "Tweet",
-  fields: {
+  fields: () => ({
     id: { type: GraphQLID },
     content: { type: GraphQLString },
     // here we associate 'author' to a Tweet; we're walking from Tweet to associated author in the 'graph'
@@ -30,7 +45,7 @@ const TweetType = new GraphQLObjectType({
           .then(resp => resp.data);
       }
     }
-  }
+  })
 });
 
 // RootQuery is your entry point to walking in the graph to get data you want along the way
@@ -51,6 +66,15 @@ const RootQuery = new GraphQLObjectType({
         //   .query(query, values)
         //   .then(res => res.rows[0]) // .rows is by postgres! CAN NOT JUST RETURN 'res' !!! Graphql won't get it!!!
         //   .catch(err => err);
+      }
+    },
+    author: {
+      type: AuthorType,
+      args: { id: { type: GraphQLID } },
+      resolve(parentValue, args) {
+        return axios
+          .get(`http://localhost:3001/authors/${args.id}`)
+          .then(resp => resp.data);
       }
     }
   }
