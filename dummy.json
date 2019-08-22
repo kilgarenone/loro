@@ -1,11 +1,36 @@
 {
   "authors": [
-    { "id": 1, "firstName": "ahwei", "desc": "im 222feeling good" },
-    { "id": 2, "firstName": "john", "desc": "pretty feeling good" }
+    {
+      "id": 1,
+      "firstName": "ahwei",
+      "desc": "im 222feeling good"
+    },
+    {
+      "id": 2,
+      "firstName": "john",
+      "desc": "pretty feeling good"
+    },
+    {
+      "firstName": "batman",
+      "desc": "im batman",
+      "id": 3
+    }
   ],
   "tweets": [
-    { "id": 1, "content": "wow im awesome", "authorId": 2 },
-    { "id": 2, "content": "1 today is a good day", "authorId": 1 },
-    { "id": 3, "content": "2 today is a good day", "authorId": 2 }
+    {
+      "id": 1,
+      "content": "wow im awesome",
+      "authorId": 2
+    },
+    {
+      "id": 2,
+      "content": "1 today is a good day",
+      "authorId": 1
+    },
+    {
+      "id": 3,
+      "content": "2 today is a good day",
+      "authorId": 2
+    }
   ]
 }

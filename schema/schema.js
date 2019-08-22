@@ -8,7 +8,8 @@ const {
   GraphQLList,
   GraphQLSchema,
   GraphQLString,
-  GraphQLID
+  GraphQLID,
+  GraphQLNonNull
 } = graphql;
 
 const AuthorType = new GraphQLObjectType({
@@ -48,6 +49,24 @@ const TweetType = new GraphQLObjectType({
   })
 });
 
+const mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: () => ({
+    addAuthor: {
+      type: AuthorType, // the type that 'resolve' returns
+      args: {
+        firstName: { type: new GraphQLNonNull(GraphQLString) }, // GraphQLNonNull means client needs to always provide it
+        desc: { type: GraphQLString }
+      },
+      resolve(parentValue, { firstName, desc }) {
+        return axios
+          .post("http://localhost:3001/authors", { firstName, desc })
+          .then(resp => resp.data);
+      }
+    }
+  })
+});
+
 // RootQuery is your entry point to walking in the graph to get data you want along the way
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -81,5 +100,6 @@ const RootQuery = new GraphQLObjectType({
 });
 
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation
 });
