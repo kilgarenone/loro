@@ -1,9 +1,9 @@
 const Router = require("express-promise-router");
 const { GraphQLSchema } = require("graphql");
-const expressGraphQl = require("express-graphql");
+const expressGraphQL = require("express-graphql");
 
-const { query } = require("../schemas/queries");
-const { mutation } = require("../schemas/mutations");
+const { query } = require("../schema/queries");
+const { mutation } = require("../schema/mutations");
 
 const schema = new GraphQLSchema({
   query
@@ -17,7 +17,7 @@ const router = new Router();
 module.exports = router;
 router.use(
   "/",
-  expressGraphQl({
+  expressGraphQL({
     schema,
     graphiql: true
   })

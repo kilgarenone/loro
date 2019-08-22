@@ -1,5 +1,5 @@
 const tweet = require("./tweet");
 
 module.exports = app => {
-  app.use("/", tweet);
+  app.use("/graphql", tweet);
 };

@@ -1,7 +1,8 @@
 const db = require("../db");
-const { GraphQLObjectType, GraphQLID } = require("graphql");
+const graphql = require("graphql");
+const { GraphQLObjectType, GraphQLID } = graphql;
 
-const { TweetType } = require("./types");
+const { TweetType } = require("./schema");
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -11,7 +12,7 @@ const RootQuery = new GraphQLObjectType({
       type: TweetType,
       args: { id: { type: GraphQLID } },
       resolve(parentValue, args) {
-        const query = `SELECT * FROM public.tweet WHERE id=$1`;
+        const query = `SELECT * FROM "tweet" WHERE id=$1`;
         const values = [args.id];
 
         return db
