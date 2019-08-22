@@ -74,6 +74,19 @@ const mutation = new GraphQLObjectType({
           .delete(`http://localhost:3001/authors/${id}`)
           .then(resp => resp.data);
       }
+    },
+    editAuthor: {
+      type: AuthorType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        firstName: { type: new GraphQLNonNull(GraphQLString) }, // GraphQLNonNull means client needs to always provide it
+        desc: { type: GraphQLString }
+      },
+      resolve(parentValue, args) {
+        return axios
+          .patch(`http://localhost:3001/authors/${args.id}`, args)
+          .then(resp => resp.data);
+      }
     }
   })
 });
