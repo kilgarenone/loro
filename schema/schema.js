@@ -63,6 +63,17 @@ const mutation = new GraphQLObjectType({
           .post("http://localhost:3001/authors", { firstName, desc })
           .then(resp => resp.data);
       }
+    },
+    deleteAuthor: {
+      type: AuthorType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) }
+      },
+      resolve(parentValue, { id }) {
+        return axios
+          .delete(`http://localhost:3001/authors/${id}`)
+          .then(resp => resp.data);
+      }
     }
   })
 });
