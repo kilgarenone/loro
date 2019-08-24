@@ -10,7 +10,7 @@ const postcssPresetEnv = require("postcss-preset-env");
 const cssnano = require("cssnano");
 const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 
-const pkg = require("../package.json");
+const pkg = require("../../package.json");
 const settings = require("./webpack.settings");
 
 // Configure Compression webpack plugin with zopfli
@@ -25,6 +25,50 @@ const configureCompression = () => {
     },
     algorithm(input, compressionOptions, callback) {
       return zopfli.gzip(input, compressionOptions, callback);
+    }
+  };
+};
+
+// Configure Babel loader
+const configureBabelLoader = (browserList = []) => {
+  return {
+    test: /\.(js|jsx)$/,
+    exclude: settings.babelLoaderConfig.exclude,
+    use: {
+      loader: "babel-loader",
+      options: {
+        cacheDirectory: true,
+        // compact: true,
+        presets: [
+          [
+            "@babel/preset-env",
+            {
+              exclude: [
+                "transform-regenerator",
+                "transform-async-to-generator"
+              ],
+              debug: !!isProduction,
+              modules: false, // don't transpile into CommonJS. crucial for tree-shaking
+              corejs: 3,
+              useBuiltIns: "usage",
+              targets: {
+                browsers: browserList
+              }
+            }
+          ]
+        ],
+        plugins: [
+          [
+            "@babel/plugin-transform-react-jsx",
+            {
+              pragma: "h"
+            }
+          ],
+          "@babel/proposal-class-properties",
+          "@babel/plugin-syntax-dynamic-import",
+          "module:fast-async"
+        ]
+      }
     }
   };
 };
@@ -71,12 +115,12 @@ const configureCSSLoader = () => ({
         modules: { localIdentName: "[hash:base64:4]" }
       }
     },
-    {
-      loader: "@americanexpress/purgecss-loader",
-      options: {
-        paths: [`${settings.srcPath}/**/*.{js,jsx}`]
-      }
-    },
+    // {
+    //   loader: "@americanexpress/purgecss-loader",
+    //   options: {
+    //     paths: [`${settings.srcPath}/**/*.{js,jsx}`]
+    //   }
+    // },
     {
       loader: "postcss-loader",
       options: {
@@ -120,6 +164,7 @@ module.exports = {
   },
   module: {
     rules: [
+      configureBabelLoader(Object.values(pkg.browserslist.evergreen)),
       configureCSSLoader(),
       configureImageLoader(),
       configureSVGLoader(),

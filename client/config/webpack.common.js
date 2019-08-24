@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
-const pkg = require("../package.json");
+
 const settings = require("./webpack.settings");
 
 const { NODE_ENV } = process.env;
@@ -18,7 +18,7 @@ const GLOBALS = {
 const isProduction = NODE_ENV !== "development";
 
 // Configure Babel loader
-const configureBabelLoader = (browserList = []) => {
+const configureBabelLoader = () => {
   return {
     test: /\.(js|jsx)$/,
     exclude: settings.babelLoaderConfig.exclude,
@@ -26,25 +26,6 @@ const configureBabelLoader = (browserList = []) => {
       loader: "babel-loader",
       options: {
         cacheDirectory: true,
-        // compact: true,
-        presets: [
-          [
-            "@babel/preset-env",
-            {
-              exclude: [
-                "transform-regenerator",
-                "transform-async-to-generator"
-              ],
-              debug: !!isProduction,
-              modules: false, // don't transpile into CommonJS. crucial for tree-shaking
-              corejs: 3,
-              useBuiltIns: "usage",
-              targets: {
-                browsers: browserList
-              }
-            }
-          ]
-        ],
         plugins: [
           [
             "@babel/plugin-transform-react-jsx",
@@ -71,7 +52,7 @@ module.exports = {
   },
   module: {
     rules: [
-      configureBabelLoader(Object.values(pkg.browserslist.evergreen)),
+      configureBabelLoader(),
       // FONT loader
       {
         test: /\.(woff|woff2)$/,

@@ -38,7 +38,7 @@ module.exports = {
     // style and scripts files for us
     new HtmlWebpackPlugin({
       template: settings.templatePath, // use our own template!,
-      filename: "index.html"
+      filename: "client/index.html"
     })
   ].concat(
     process.env.BROWSER_SYNC
